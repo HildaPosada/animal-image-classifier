@@ -30,7 +30,21 @@ The model is trained to recognize the following animals:
 - GitHub (for version control)
 
 ## 🗂️ Project Structure
+```
+animal-image-classifier/
+├── app/ # Streamlit app │
+├── app.py # Main Streamlit script │
+└── utils.py # Helper functions for loading/preprocessing │
+├── data/ # (Optional) Sample or test data │
+├── models/ # Trained model files (e.g., model.h5 or .pt) │
+├── notebooks/ │
+└── training.ipynb # Jupyter notebook for training & EDA │
+├── .gitignore # Files to ignore in Git
+├── LICENSE # Project license
+├── README.md # This file
+└── requirements.txt # Python dependencies
 
+```
 
 ## 🚀 How to Run the App
 ```bash

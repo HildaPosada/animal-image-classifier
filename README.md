@@ -16,8 +16,6 @@ The model classifies the following exotic animals:
   <tr>
     <td>🦁 Lion</td>
     <td>🐯 Tiger</td>
-    <td>🐘 Elephant</td>
-    <td>🦓 Zebra</td>
   </tr>
   <tr>
     <td>🦒 Giraffe</td>
@@ -28,6 +26,12 @@ The model classifies the following exotic animals:
   <tr>
     <td>🐻 Bear</td>
     <td>🦩 Flamingo</td>
+    <td></td>
+    <td></td>
+  </tr>
+   <tr>
+    <td>🐘 Elephant</td>
+    <td>🦓 Zebra</td>
     <td></td>
     <td></td>
   </tr>

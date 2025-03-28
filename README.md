@@ -35,16 +35,14 @@ The model classifies the following exotic animals:
 ```
 animal-image-classifier/
 ├── app/
-│ ├── app.py # Main Streamlit app
-│ ├── utils.py # Helper functions for inference
-│     └── data/ # (Optional) Local test images
-├── models/ # Trained model (e.g., .pt, .h5, .onnx)
-├── notebooks/
-│   └── training.ipynb # Training notebook
-├── requirements.txt # Python dependencies
-├── .gitignore # Git ignore file
-├── LICENSE
-└── README.md
+│   ├── app.py
+│   ├── utils.py
+│   └── demo.png  (optional screenshot)
+├── models/       (optional)
+├── notebooks/    (optional)
+├── requirements.txt
+├── README.md
+└── .gitignore
 ```
 
 ## 🚀 How to Run the App

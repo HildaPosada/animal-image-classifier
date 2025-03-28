@@ -79,6 +79,6 @@ This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Un
 
 ## 📸 Demo
 
-<img src="app/demo.png" width="800"/>
+<img src="app/demo.png" width="500"/>
 
 

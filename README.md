@@ -58,7 +58,16 @@ pip install -r requirements.txt
 
 # Step 3: Run the app
 streamlit run app/app.py
-
+```
 🔗 Roboflow Dataset
 
 This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Universe.
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Deployed-success?style=flat&logo=streamlit)](https://share.streamlit.io/your-app-link)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue)](http://localhost:5000)
+[![Python](https://img.shields.io/badge/python-3.10-blue?logo=python)](https://www.python.org/)
+
+## 📸 Demo Screenshot
+
+<img src="app/demo.png" width="700"/>
+
+

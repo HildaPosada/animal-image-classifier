@@ -10,39 +10,43 @@ This project demonstrates the full ML pipeline:
 - (Optional) MLflow integration for experiment tracking
 - GitHub for version control and open collaboration
 
-## 🐾 Animal Classes 
+## 🐾 Animal Classes  
 The model classifies the following exotic animals:
-
 <table>
   <tr>
     <td>🦁 Lion</td>
     <td>🐯 Tiger</td>
-  </tr>
-  <tr>
     <td>🐘 Elephant</td>
-    <td>🦓 Zebra</td>
   </tr>
   <tr>
+    <td>🦓 Zebra</td>
     <td>🦒 Giraffe</td>
     <td>🦘 Kangaroo</td>
   </tr>
   <tr>
     <td>🐼 Panda</td>
     <td>🐒 Monkey</td>
+    <td>🐻 Bear</td>
   </tr>
   <tr>
-    <td>🐻 Bear</td>
     <td>🦩 Flamingo</td>
+    <td></td>
+    <td></td>
   </tr>
 </table>
-
 ## 🧰 Tools & Technologies
-- **Python**
-- **Roboflow** – dataset management & model training
-- **PyTorch/TensorFlow** – model backend
-- **Streamlit** – frontend interface
-- **MLflow** – experiment tracking (optional)
-- **GitHub** – version control
+<table>
+  <tr>
+    <td><strong>Python</strong></td>
+    <td><strong>Roboflow</strong><br/>Dataset management & training</td>
+    <td><strong>PyTorch / TensorFlow</strong><br/>Model backend</td>
+  </tr>
+  <tr>
+    <td><strong>Streamlit</strong><br/>Frontend interface</td>
+    <td><strong>MLflow</strong><br/>Experiment tracking (optional)</td>
+    <td><strong>GitHub</strong><br/>Version control</td>
+  </tr>
+</table>
 
 ## 🗂️ Project Structure
 ```

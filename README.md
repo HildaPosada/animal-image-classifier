@@ -1,54 +1,64 @@
-# 🐯 Animal-image-classifier
+# 🐯 Animal Image Classifier
 
-A machine learning project that classifies images of 10 exotic animals using a deep learning model and deploys it through a Streamlit app.
+A machine learning project that classifies images of 10 exotic animals using a deep learning model. The model is deployed via an interactive Streamlit app for real-time image classification.
 
 ## 🔍 Project Overview
-This project:
-- Uses image classification to recognize different exotic animals
-- Trains a CNN model (e.g., MobileNet, ResNet)
-- Deploys the model in an interactive Streamlit app
+This project demonstrates the full ML pipeline:
+- Image classification of exotic animals using a CNN model (ResNet34 via Roboflow)
+- Model training with 47,000+ annotated images
+- Streamlit app for easy user interaction
+- (Optional) MLflow integration for experiment tracking
+- GitHub for version control and open collaboration
 
 ## 🐾 Animal Classes
-The model is trained to recognize the following animals:
-- lion 🦁
-- tiger 🐯
-- elephant 🐘
-- zebra 🦓
-- giraffe 🦒
-- kangaroo 🦘
-- panda 🐼
-- monkey 🐒
-- bear 🐻
-- flamingo 🦩
+The model classifies the following exotic animals:
+- 🦁 Lion
+- 🐯 Tiger
+- 🐘 Elephant
+- 🦓 Zebra
+- 🦒 Giraffe
+- 🦘 Kangaroo
+- 🐼 Panda
+- 🐒 Monkey
+- 🐻 Bear
+- 🦩 Flamingo
 
-## 🧠 Tools & Tech Stack
-- Python
-- TensorFlow or PyTorch
-- Roboflow (for dataset management)
-- Streamlit (for deployment)
-- MLflow (for experiment tracking, optional)
-- GitHub (for version control)
+## 🧰 Tools & Technologies
+- **Python**
+- **Roboflow** – dataset management & model training
+- **PyTorch/TensorFlow** – model backend
+- **Streamlit** – frontend interface
+- **MLflow** – experiment tracking (optional)
+- **GitHub** – version control
 
 ## 🗂️ Project Structure
 ```
 animal-image-classifier/
-├── app/ # Streamlit app
-│   ├── app.py # Main Streamlit script
-│   │    └── utils.py # Helper functions for loading/preprocessing
-│   ├── data/ # (Optional) Sample or test data
-│   ├── models/ # Trained model files (e.g., model.h5 or .pt)
-│   ├── notebooks/
-│   │    └── training.ipynb # Jupyter notebook for training & EDA
-│   ├── .gitignore # Files to ignore in Git
-├── LICENSE # Project license
-├── README.md # This file
-    └── requirements.txt # Python dependencies
+├── app/
+│ ├── app.py # Main Streamlit app
+│ ├── utils.py # Helper functions for inference
+│     └── data/ # (Optional) Local test images
+├── models/ # Trained model (e.g., .pt, .h5, .onnx)
+├── notebooks/
+│   └── training.ipynb # Training notebook
+├── requirements.txt # Python dependencies
+├── .gitignore # Git ignore file
+├── LICENSE
+└── README.md
 ```
 
 ## 🚀 How to Run the App
 ```bash
-# Step 1: Install dependencies
+# Step 1: Clone the repo
+git clone https://github.com/your-username/animal-image-classifier.git
+cd animal-image-classifier
+
+# Step 2: Install dependencies
 pip install -r requirements.txt
 
-# Step 2: Run the Streamlit app
+# Step 3: Run the app
 streamlit run app/app.py
+
+🔗 Roboflow Dataset
+
+This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Universe.

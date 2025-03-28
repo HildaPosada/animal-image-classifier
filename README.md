@@ -77,8 +77,8 @@ This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Un
 [![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue)](http://localhost:5000)
 [![Python](https://img.shields.io/badge/python-3.10-blue?logo=python)](https://www.python.org/)
 
-## 📸 Demo Screenshot
+## 📸 Demo
 
-<img src="app/demo.png" width="700"/>
+<img src="app/demo.png" width="800"/>
 
 

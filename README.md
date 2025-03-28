@@ -26,11 +26,10 @@ The model classifies the following exotic animals:
   <tr>
     <td>🐼 Panda</td>
     <td>🐒 Monkey</td>
-    <td>🐻 Bear</td>
   </tr>
   <tr>
     <td>🦩 Flamingo</td>
-    <td></td>
+    <td>🐻 Bear</td>
     <td></td>
   </tr>
 </table>

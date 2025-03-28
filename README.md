@@ -49,6 +49,8 @@ animal-image-classifier/
 │   ├── app.py
 │   ├── utils.py
 │   └── demo.png  (optional screenshot)
+├── .streamlit/
+│   └── config.toml
 ├── models/       (optional)
 ├── notebooks/    (optional)
 ├── requirements.txt
@@ -71,7 +73,7 @@ streamlit run app/app.py
 🔗 Roboflow Dataset
 
 This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Universe.
-[![Streamlit App](https://img.shields.io/badge/Streamlit-Deployed-success?style=flat&logo=streamlit)](https://share.streamlit.io/your-app-link)
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Live-success?logo=streamlit)](https://animal-image-classifier-eynumv4gc2vizfzfn4wvl5.streamlit.app/)
 [![MLflow](https://img.shields.io/badge/MLflow-Tracking-blue)](http://localhost:5000)
 [![Python](https://img.shields.io/badge/python-3.10-blue?logo=python)](https://www.python.org/)
 

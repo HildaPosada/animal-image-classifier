@@ -1,5 +1,8 @@
 # 🐯 Animal Image Classifier
 
+> **[Live Demo](https://animal-demo-flax.vercel.app)** | Animal Classifier Demo
+
+
 A machine learning project that classifies images of 10 exotic animals using a deep learning model. The model is deployed via an interactive Streamlit app for real-time image classification.
 
 ## 🔍 Project Overview
@@ -80,5 +83,3 @@ This model was trained on the YOLO1 - Pet Dataset by Aysha Salman on Roboflow Un
 ## 📸 Demo
 
 <img src="app/demo.png" width="500"/>
-
-

@@ -1,49 +1,37 @@
-import streamlit as st
-import requests
-from PIL import Image
-import io
 import os
-import time
+import streamlit as st
+from PIL import Image, ImageOps, UnidentifiedImageError
+from inference import predict, InferenceError
 
-# --- Config ---
-st.set_page_config(page_title="🐾 Animal Classifier", layout="centered")
-
-# --- Title ---
-st.markdown("<h1 style='text-align: center;'>🐯 Animal Image Classifier</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Upload an exotic animal image and get predictions with confidence 📸</p>", unsafe_allow_html=True)
-
-# --- Upload Image ---
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
-
-# --- Roboflow Config ---
-ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY")
-PROJECT_NAME = "yolo1-petqw"
-PROJECT_VERSION = "1"
-
-def predict_with_roboflow(image):
-    api_url = f"https://detect.roboflow.com/{PROJECT_NAME}/{PROJECT_VERSION}?api_key={ROBOFLOW_API_KEY}"
-    img_bytes = io.BytesIO()
-    image.save(img_bytes, format='PNG')
-    img_bytes.seek(0)
-    response = requests.post(api_url, files={"file": img_bytes})
-    return response.json() if response.status_code == 200 else None
-
-# --- Show Image & Predict ---
-if uploaded_file:
-    image = Image.open(uploaded_file)
-    st.image(image, caption="Your Uploaded Image", use_column_width=True)
-
-    with st.spinner("🧠 Thinking..."):
-        result = predict_with_roboflow(image)
-        time.sleep(1)
-
-    if result and result.get("predictions"):
-        pred = result["predictions"][0]
-        label = pred["class"]
-        confidence = float(pred["confidence"]) * 100
-
-        st.markdown(f"### 🐾 Prediction: `{label}`")
-        st.progress(int(confidence))
-        st.success(f"Confidence: {confidence:.2f}%")
-    else:
-        st.warning("❌ No animal detected. Try a clearer or different image.")
+st.set_page_config(page_title='Animal Image Classifier', layout='centered')
+st.title('Animal Image Classifier')
+st.write('Upload an image to request a prediction from the configured Roboflow model.')
+st.caption('A model may mislabel unfamiliar animals or non-animal images. Confidence is not proof that the label is correct.')
+upload = st.file_uploader('Upload a JPG or PNG image', type=['jpg', 'jpeg', 'png'])
+if upload:
+    if upload.size > 10 * 1024 * 1024:
+        st.error('Choose an image smaller than 10 MB.')
+        st.stop()
+    try:
+        image = ImageOps.exif_transpose(Image.open(upload))
+        image.load()
+    except (UnidentifiedImageError, OSError, Image.DecompressionBombError):
+        st.error('This file could not be read as a valid image.')
+        st.stop()
+    st.image(image, caption='Uploaded image', use_container_width=True)
+    if st.button('Classify image', type='primary'):
+        try:
+            with st.spinner('Requesting prediction…'):
+                predictions = predict(image, os.getenv('ROBOFLOW_API_KEY'), os.getenv('ROBOFLOW_PROJECT', 'yolo1-petqw'), os.getenv('ROBOFLOW_VERSION', '1'))
+        except InferenceError as exc:
+            st.error(str(exc))
+        else:
+            if not predictions:
+                st.info('The model returned no detections for this image.')
+            else:
+                top = predictions[0]
+                st.subheader('Highest-confidence model prediction')
+                st.write(top['class'])
+                st.write(f"Confidence: {top['confidence']:.1%}")
+                st.progress(top['confidence'])
+                st.dataframe(predictions, hide_index=True)

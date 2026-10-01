@@ -22,7 +22,7 @@ if upload:
     if st.button('Classify image', type='primary'):
         try:
             with st.spinner('Requesting prediction…'):
-                predictions = predict(image, os.getenv('ROBOFLOW_API_KEY'), os.getenv('ROBOFLOW_PROJECT', 'yolo1-petqw'), os.getenv('ROBOFLOW_VERSION', '1'))
+                predictions = predict(image, os.getenv('ROBOFLOW_API_KEY'), os.getenv('ROBOFLOW_PROJECT', 'animal-image-classifier'), os.getenv('ROBOFLOW_VERSION', '1'))
         except InferenceError as exc:
             st.error(str(exc))
         else:

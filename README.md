@@ -9,7 +9,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Set `ROBOFLOW_API_KEY` in the deployment's secret/environment settings. Optional `ROBOFLOW_PROJECT` and `ROBOFLOW_VERSION` select the model; defaults are `yolo1-petqw` and `1`. Never commit the key.
+Set `ROBOFLOW_API_KEY` in the deployment's secret/environment settings. Optional `ROBOFLOW_PROJECT` and `ROBOFLOW_VERSION` select the model; defaults are `animal-image-classifier` and `1`. Never commit the key.
 
 The app validates image uploads, uses request timeouts, distinguishes service failures from empty detections, and displays the highest-confidence prediction first. It does not train a model locally.
 
@@ -21,4 +21,8 @@ The repository does not contain model weights, a training dataset, or recorded e
 
 A model can misclassify dogs, unfamiliar species, and non-animal images. A high confidence score is not a guarantee of correctness. Evaluate known positive images and out-of-distribution inputs before making accuracy claims.
 
-The Vercel page at `animal-demo-flax.vercel.app` is a separate interface; its inspected implementation used preset sample scores and random labels for uploads. It should not be presented as real inference until connected to a model.
+## Web demo deployment
+
+The `web/` directory contains the static interface and Python prediction endpoint. Set Vercel's Root Directory to `web`, Framework Preset to Other, and store `ROBOFLOW_API_KEY` as a secret for Production and Preview. The browser submits images to `/api/predict`; the key stays on the server. Uploads are limited to 3 MB. Predictions are requested from Roboflow, not generated randomly.
+
+Roboflow identifies the hosted model as ResNet34 Classification and reports 77.6% validation accuracy. This is the provider's evaluation, not an independent accuracy measurement from this repository.

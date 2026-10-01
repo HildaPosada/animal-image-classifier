@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Exotic Animal Classifier</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0d0d;color:#e8e6e3;font-family:system-ui,sans-serif;min-height:100vh}
+.topbar{background:#141414;border-bottom:1px solid #242424;padding:1rem 2rem;display:flex;align-items:center;gap:1rem}
+.topbar h1{font-size:1.1rem;font-weight:700}
+.badge{background:#00c89620;color:#00c896;border:1px solid #00c896;padding:.2rem .7rem;border-radius:999px;font-size:.7rem;font-weight:700}
+.main{max-width:900px;margin:2rem auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.panel{background:#141414;border:1px solid #242424;border-radius:.75rem;padding:1.5rem}
+.panel h2{font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.25rem}
+.drop-zone{border:2px dashed #333;border-radius:.75rem;padding:3rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden}
+.drop-zone:hover,.drop-zone.drag{border-color:#00c896;background:#00c89608}
+.drop-zone .icon{font-size:2.5rem;margin-bottom:.75rem}
+.drop-zone p{color:#888;font-size:.875rem}
+.drop-zone p strong{color:#00c896}
+#preview{width:100%;border-radius:.5rem;margin-top:1rem;display:none;max-height:280px;object-fit:cover}
+.btn{width:100%;margin-top:1rem;padding:.75rem;background:#00c896;color:#0d0d0d;font-weight:800;border:none;border-radius:.5rem;cursor:pointer;font-size:.9rem}
+.btn:disabled{background:#333;color:#666;cursor:not-allowed}
+.result-area{min-height:200px}
+.top-pred{font-size:1.75rem;font-weight:800;color:#00c896;margin-bottom:.25rem}
+.conf{font-size:.875rem;color:#888;margin-bottom:1.25rem}
+.bar-item{margin-bottom:.65rem}
+.bar-label{font-size:.75rem;color:#888;display:flex;justify-content:space-between;margin-bottom:.2rem}
+.bar-track{background:#1a1a1a;border-radius:4px;height:8px}
+.bar-fill{height:8px;border-radius:4px;background:linear-gradient(90deg,#00c896,#00b085)}
+.sample-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.4rem;margin-top:1rem}
+.sample-btn{background:#1a1a1a;border:1px solid #242424;border-radius:.4rem;padding:.4rem;font-size:.65rem;color:#888;cursor:pointer;text-align:center;transition:all .15s}
+.sample-btn:hover{border-color:#00c896;color:#00c896}
+.animal-icon{font-size:1.25rem;margin-bottom:.15rem}
+.placeholder-msg{color:#555;font-size:.875rem;padding:2rem 0;text-align:center}
+.footer{text-align:center;padding:1.5rem;font-size:.75rem;color:#444}
+.footer a{color:#00c896;text-decoration:none}
+@media(max-width:600px){.main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div style="font-size:1.25rem">🐾</div>
+  <h1>Exotic Animal Classifier</h1>
+  <div class="badge">Hosted model inference</div>
+  <div style="margin-left:auto;font-size:.75rem;color:#555">Built by <a href="https://hildaposada.github.io" style="color:#00c896;text-decoration:none">Hilda Posada</a></div>
+</div>
+<div class="main">
+  <div>
+    <div class="panel">
+      <h2>Upload an Animal Image</h2>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="icon">📸</div>
+        <p>Drop image here or <strong>click to upload</strong></p>
+        <p style="margin-top:.4rem;font-size:.75rem">JPG, PNG · Max 3MB</p>
+        <img id="preview" alt="preview"/>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)"/>
+      <div style="margin-top:1rem">
+        <div style="font-size:.7rem;color:#555;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em">Or try a sample:</div>
+        <div class="sample-grid" id="sampleGrid"></div>
+      </div>
+      <button class="btn" id="classifyBtn" onclick="classify()" disabled>Classify Animal →</button>
+    </div>
+    <div class="panel" style="margin-top:1.25rem">
+      <h2>Model Info</h2>
+      <div style="font-size:.8rem;color:#888;line-height:1.7">
+        ResNet34 classifier hosted on Roboflow. Validation accuracy reported in Roboflow: 77.6%.<br><br>
+        Upload an image to request a real model prediction.<br><br>
+        <a href="https://github.com/HildaPosada/animal-image-classifier" target="_blank" style="color:#00c896;text-decoration:none">View code on GitHub →</a>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Classification Result</h2>
+    <div class="result-area" id="resultArea">
+      <div class="placeholder-msg">Select an animal image to see predictions.</div>
+    </div>
+  </div>
+</div>
+<div class="footer"><a href="https://github.com/HildaPosada/animal-image-classifier" target="_blank">View full project on GitHub →</a></div>
+<script>
+let uploadedImage = null;
+const result = document.getElementById('resultArea');
+document.getElementById('sampleGrid').previousElementSibling.remove();
+document.getElementById('sampleGrid').remove();
+
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', event => { event.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', event => { event.preventDefault(); dropZone.classList.remove('drag'); handleFile({files: event.dataTransfer.files}); });
+function handleFile(input) {
+  uploadedImage = null;
+  document.getElementById('classifyBtn').disabled = true;
+  const file = input.files[0];
+  if (!file) return;
+  if (!['image/jpeg', 'image/png'].includes(file.type) || file.size > 3 * 1024 * 1024) {
+    result.textContent = 'Choose a JPG or PNG smaller than 3 MB.'; return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const preview = document.getElementById('preview');
+    preview.onload = () => { uploadedImage = reader.result.split(',')[1]; document.getElementById('classifyBtn').disabled = false; result.textContent = 'Image ready. Click Classify to request a prediction.'; };
+    preview.onerror = () => { result.textContent = 'The image could not be read.'; };
+    preview.src = reader.result; preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+async function classify() {
+  if (!uploadedImage) return;
+  const btn = document.getElementById('classifyBtn');
+  btn.disabled = true; btn.textContent = 'Classifying…'; result.textContent = 'Requesting model prediction…';
+  try {
+    const response = await fetch('/api/predict', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({image:uploadedImage})});
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Prediction service is unavailable.');
+    result.replaceChildren();
+    if (!data.predictions.length) { result.textContent = 'The model returned no detections.'; return; }
+    const title = document.createElement('div'); title.className = 'top-pred'; title.textContent = data.predictions[0].class; result.append(title);
+    for (const prediction of data.predictions) {
+      const line = document.createElement('p'); line.textContent = prediction.class + ': ' + (prediction.confidence * 100).toFixed(1) + '%'; result.append(line);
+    }
+    const note = document.createElement('p'); note.textContent = 'Model confidence is not proof of correctness. Unfamiliar images may receive incorrect labels.'; result.append(note);
+  } catch (error) { result.textContent = error.message; }
+  finally { btn.disabled = false; btn.textContent = 'Classify Animal →'; }
+}
+</script></body></html>

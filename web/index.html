@@ -57,7 +57,7 @@ body{background:#0d0d0d;color:#e8e6e3;font-family:system-ui,sans-serif;min-heigh
       <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(this)"/>
       <div style="margin-top:1rem">
         <div style="font-size:.7rem;color:#555;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.06em">Or try a sample:</div>
-        <div class="sample-grid" id="sampleGrid"></div>
+        <div class="sample-grid"><button class="sample-btn" onclick="loadElephant()">🐘<br>Try elephant</button></div>
       </div>
       <button class="btn" id="classifyBtn" onclick="classify()" disabled>Classify Animal →</button>
     </div>
@@ -81,8 +81,13 @@ body{background:#0d0d0d;color:#e8e6e3;font-family:system-ui,sans-serif;min-heigh
 <script>
 let uploadedImage = null;
 const result = document.getElementById('resultArea');
-document.getElementById('sampleGrid').previousElementSibling.remove();
-document.getElementById('sampleGrid').remove();
+async function loadElephant() {
+  try {
+    const response = await fetch('/samples/elephant.jpg');
+    if (!response.ok) throw new Error('Sample image is unavailable.');
+    handleFile({files: [new File([await response.blob()], 'elephant.jpg', {type: 'image/jpeg'})]});
+  } catch (error) { result.textContent = error.message; }
+}
 
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', event => { event.preventDefault(); dropZone.classList.add('drag'); });
@@ -115,10 +120,11 @@ async function classify() {
     if (!response.ok) throw new Error(data.error || 'Prediction service is unavailable.');
     result.replaceChildren();
     if (!data.predictions.length) { result.textContent = 'The model returned no detections.'; return; }
-    const title = document.createElement('div'); title.className = 'top-pred'; title.textContent = data.predictions[0].class; result.append(title);
+    const title = document.createElement('div'); title.className = 'top-pred'; title.textContent = data.predictions[0].confidence < 0.7 ? 'Uncertain prediction' : data.predictions[0].class; result.append(title);
     for (const prediction of data.predictions) {
       const line = document.createElement('p'); line.textContent = prediction.class + ': ' + (prediction.confidence * 100).toFixed(1) + '%'; result.append(line);
     }
+    if (data.predictions[0].confidence < 0.7) { const warning = document.createElement('p'); warning.textContent = 'The top score is below the demo’s 70% display threshold. Treat this label as uncertain. This threshold is a UI caution, not a calibrated accuracy guarantee.'; result.append(warning); }
     const note = document.createElement('p'); note.textContent = 'Model confidence is not proof of correctness. Unfamiliar images may receive incorrect labels.'; result.append(note);
   } catch (error) { result.textContent = error.message; }
   finally { btn.disabled = false; btn.textContent = 'Classify Animal →'; }

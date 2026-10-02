@@ -6,6 +6,8 @@
 [![Vercel](https://img.shields.io/badge/Vercel-171717?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 
 
+> **[Live app](https://animal-demo-flax.vercel.app/)**
+
 A Streamlit interface that submits uploaded images to a configured Roboflow inference endpoint and displays its predictions.
 
 ## Run

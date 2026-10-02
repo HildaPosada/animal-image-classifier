@@ -1,0 +1,5 @@
+import {pipeline,env} from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/dist/transformers.min.js';
+env.allowLocalModels=false;env.backends.onnx.wasm.numThreads=1;
+let classifier;
+const labels=['dog','cat','elephant','giraffe','lion','tiger','zebra','panda','bear','horse','deer','monkey','gorilla','rhinoceros','hippopotamus','crocodile','snake','bird','chicken','penguin','fish','butterfly','a scene without an animal'];
+self.onmessage=async({data})=>{try{if(data.dispose){if(classifier)await classifier.dispose();classifier=null;return}if(!classifier)classifier=await pipeline('zero-shot-image-classification','Xenova/clip-vit-base-patch32',{revision:'d15189d7028b43f1d3e65039190477f6af591c2a',dtype:'q8',progress_callback:p=>{if(p.status==='progress')self.postMessage({progress:p.file+' '+Math.round(p.progress)+'%'})}});const output=await classifier(data.image,labels,{hypothesis_template:'a photo of {}'});self.postMessage({predictions:output.map(p=>({class:p.label,confidence:p.score})),model:'CLIP ViT-B/32 zero-shot'})}catch(error){self.postMessage({error:'Browser model could not run: '+error.message})}};
